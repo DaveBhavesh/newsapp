@@ -61,8 +61,8 @@ export class News extends Component {
   render() {
     return (
       <div
-        className="container my-3"
-        style={{ backgroundColor: "#181717", padding: "4px" }}
+        className="container my-3" 
+        style={{ backgroundColor: "#181717", padding: "4px"}}
       >
         <h1
           className="my-4 text-center"
@@ -85,19 +85,17 @@ export class News extends Component {
                     }
                     imageUrl={element.urlToImage}
                     newsUrl={element.url}
+                    author={element.author}
+                    date={element.publishedAt}
+                    source={element.source.name}
                   />
                 </div>
               );
             })}
         </div>
         <div className="container d-flex justify-content-between">
-          <button
-            disabled={this.state.page <= 1}
-            type="button"
-            className="btn btn-light"
-            onClick={this.handlePreviousClick}
-          >
-            {" "}
+          <button  disabled={this.state.page <= 1} type="button" className="btn btn-light"onClick={this.handlePreviousClick}>
+         
             &larr; Previous
           </button>
           <button
@@ -105,7 +103,6 @@ export class News extends Component {
             type="button"
             className="btn btn-light"
             onClick={this.handleNextClick}
-            v
           >
             Next &rarr;
           </button>

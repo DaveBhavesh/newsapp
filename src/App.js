@@ -3,22 +3,33 @@ import React, { Component } from "react";
 import Navbar from "./Components/Navbar";
 import News from "./Components/News";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import LoadingBar from 'react-top-loading-bar'
 
 export default class App extends Component {
+  pageSize = 6 ;
+  apiKey=process.env.REACT_APP_NEWS_API;
+
+  state={progress:0}
+
+  setProgress=(progress)=>{
+    this.setState({progress:progress})
+  }
   render() {
     return (
       <div>
         <Router>
         <Navbar />
+        <LoadingBar height={3} color='#f11946' progress={this.state.progress}/>
+
         <Routes>
         
-        <Route exact path="/" element={<News pageSize={6} country='in' category='General' api='247b90a7f84b4a409105db57e9a3d601'/>}/> 
-        <Route exact path="/business" element={<News  key="business" pageSize={6} country='in' category='Business' api='247b90a7f84b4a409105db57e9a3d601' />}/>
-        <Route exact path="/entertainment" element={<News key="entertainment" pageSize={6} country='in' category='Entertainment' api='247b90a7f84b4a409105db57e9a3d601' />}/>
-        <Route exact path="/health" element={<News key="health" pageSize={6} country='in' category='Health' api='247b90a7f84b4a409105db57e9a3d601' />}/>
-        <Route exact path="/science" element={<News key="science" pageSize={6} country='in' category='Science' api='247b90a7f84b4a409105db57e9a3d601' />}/>
-        <Route exact path="/sports" element={<News key="sports" pageSize={6} country='in' category='Sports' api='247b90a7f84b4a409105db57e9a3d601' />}/>
-        <Route exact path="/tech" element={<News key="technology" pageSize={6} country='in' category='Technology' api='247b90a7f84b4a409105db57e9a3d601' />}/>
+        <Route exact path="/" element={<News setProgress={this.setProgress} pageSize={this.pageSize} country='in' category='General' api={this.apiKey}/>}/> 
+        <Route exact path="/business" element={<News setProgress={this.setProgress}  key="business" pageSize={6} country='in' category='Business' api={this.apiKey}/>}/>
+        <Route exact path="/entertainment" element={<News setProgress={this.setProgress} key="entertainment" pageSize={6} country='in' category='Entertainment' api={this.apiKey}/>}/>
+        <Route exact path="/health" element={<News setProgress={this.setProgress} key="health" pageSize={6} country='in' category='Health' api={this.apiKey}/>}/>
+        <Route exact path="/science" element={<News setProgress={this.setProgress} key="science" pageSize={6} country='in' category='Science' api={this.apiKey}/>}/>
+        <Route exact path="/sports" element={<News setProgress={this.setProgress} key="sports" pageSize={6} country='in' category='Sports' api={this.apiKey}/>}/>
+        <Route exact path="/tech" element={<News setProgress={this.setProgress} key="technology" pageSize={6} country='in' category='Technology' api={this.apiKey}/>}/>
         
         </Routes>
         </Router>

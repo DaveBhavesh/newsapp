@@ -1,69 +1,61 @@
-import React, { Component } from "react";
+import React, {useEffect,useState} from "react";
 import NewsItem from "./NewsItem";
 import Spinner from "./Spinner";
 import InfiniteScroll from "react-infinite-scroll-component";
 // import LoadingBar from "react-top-loading-bar";
 
-export class News extends Component {
-  constructor(props) {
-    super(props);
-    console.log("Hello I am from News.js");
-    this.state = {
-      articles: [],
-      page: 1,
-      loading: false,
-      totalResults:0
-    };
-    document.title= `${this.props.category}-NewsBites` 
-  }
+const News=(props)=>{
 
-  async  updateNews(){
-    this.props.setProgress(10);
-    let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=${this.props.api}&page=${this.state.page}&pageSize=${this.props.pageSize}`;
-    this.setState({ loading: true });
+  console.log("Hello I am from News.js");
+  const [articles, setArticles] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [page, setPage] = useState(1)
+  const [totalResults, setTotalResults] = useState(0)
+
+  
+    // document.title= `${props.category}-NewsBites` 
+ 
+
+   const updateNews=async()=>{
+    props.setProgress(10);
+    setLoading(true)
+    let url = `https://newsapi.org/v2/top-headlines?country=${props.country}&category=${props.category}&apiKey=${props.api}&page=${page}&pageSize=${props.pageSize}`;
     let data = await fetch(url);
-    this.props.setProgress(30);
+    props.setProgress(30);
     let parsedData = await data.json();
-    this.props.setProgress(70);
+    props.setProgress(70);
     console.log(parsedData);
-    this.setState({
-      articles: parsedData.articles,
-      totalResults: parsedData.totalResults,
-      loading: false,
-    });
-   this.props.setProgress(100);
+    setArticles(parsedData.articles)
+    setTotalResults(parsedData.totalResults)
+    setLoading(false)
+   props.setProgress(100);
   }
 
-  async componentDidMount() {
-    this.updateNews();
-  }
+    useEffect(() => {
+        updateNews();
+    }, []);
 
-  // handlePreviousClick = async () => {
+  //  const handlePreviousClick = async () => {
   //   console.log("Previous");
-  //   this.setState({page: this.state.page - 1})
-  //   this.updateNews()
+  //   setPage(page-1)
+  //   updateNews()
   // };
-  // handleNextClick = async () => {
+  // const handleNextClick = async () => {
   //   console.log("Next");
-  //   this.setState({page: this.state.page + 1})
-  //   this.updateNews()
+  //    setPage(page+1)
+  //   updateNews()
   // };
 
-  fetchMoreData = async() => {
-      this.setState({page:this.state.page+1})
-      const url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=${this.props.api}&page=${this.state.page}&pageSize=${this.props.pageSize}`;
+   const fetchMoreData = async() => {
+      setPage(page+1)
+      let url = `https://newsapi.org/v2/top-headlines?country=${props.country}&category=${props.category}&apiKey=${props.api}&page=${page}&pageSize=${props.pageSize}`;
     let data = await fetch(url);
     let parsedData = await data.json();
     console.log(parsedData);
-    this.setState({
-      articles: this.state.articles.concat(parsedData.articles),
-      totalResults: parsedData.totalResults
-    });
-    this.setState({ loading: false });
-      
+    setArticles(articles.concat(parsedData.articles))
+    setTotalResults(parsedData.totalResults)
   };
 
-  render() {
     return (
       <div
        className="container my-3" 
@@ -73,18 +65,18 @@ export class News extends Component {
           className="my-4 text-center"
           style={{ color: "white", margin: "30px 0px" }}
         >
-          News Bites - Top {this.props.category} Headlines 
+          News Bites - Top {props.category} Headlines 
         </h1>
-        {this.state.loading && <Spinner />}
+        {loading && <Spinner />}
         <InfiniteScroll  
        
-        dataLength={this.state.articles.length}
-        next={this.fetchMoreData}
-        hasMore={this.state.articles.length!==this.state.totalResults}
-        loader= {this.state.articles.length<=this.state.totalResults ?  <Spinner />:" "}>
+        dataLength={articles.length}
+        next={fetchMoreData}
+        hasMore={articles.length!==totalResults}
+        loader= {articles.length<=totalResults ?  <Spinner />:" "}>
           <div className="container">
         <div className="row">
-          { this.state?.articles?.map((element) => {
+          {articles?.map((element) => {
            
               return (
                 <div className="col-md-4  mb-5" key={element.url}>
@@ -108,21 +100,21 @@ export class News extends Component {
         </InfiniteScroll>
         
         {/* <div className="container d-flex justify-content-between">
-          <button  disabled={this.state.page <= 1} type="button" className="btn btn-light"onClick={this.handlePreviousClick}>
+          <button  disabled={page <= 1} type="button" className="btn btn-light"onClick={handlePreviousClick}>
             &larr; Previous
           </button>
           <button
-            disabled={this.state.page + 1 > Math.ceil(this.state.totalResults / this.props.pageSize)}
+            disabled={page + 1 > Math.ceil(totalResults / props.pageSize)}
             type="button"
             className="btn btn-light"
-            onClick={this.handleNextClick}
+            onClick={handleNextClick}
           >
             Next &rarr;
           </button>
         </div> */}
       </div>
     );
-  }
+ 
 }
 
 export default News;

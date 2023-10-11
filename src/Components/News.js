@@ -24,6 +24,7 @@ const News=(props)=>{
     props.setProgress(30);
     let parsedData = await data.json();
     props.setProgress(70);
+    console.log("Here is the Parsed Data :");
     console.log(parsedData);
     setArticles(parsedData.articles)
     setTotalResults(parsedData.totalResults)
@@ -32,7 +33,9 @@ const News=(props)=>{
   }
 
     useEffect(() => {
+      document.title=`${props.category}-NewsBites`
         updateNews();
+        //eslint-disable-next-line
     }, []);
 
   //  const handlePreviousClick = async () => {
@@ -47,8 +50,8 @@ const News=(props)=>{
   // };
 
    const fetchMoreData = async() => {
-      setPage(page+1)
-      let url = `https://newsapi.org/v2/top-headlines?country=${props.country}&category=${props.category}&apiKey=${props.api}&page=${page}&pageSize=${props.pageSize}`;
+    let url = `https://newsapi.org/v2/top-headlines?country=${props.country}&category=${props.category}&apiKey=${props.api}&page=${page+1}&pageSize=${props.pageSize}`;
+    setPage(page+1)
     let data = await fetch(url);
     let parsedData = await data.json();
     console.log(parsedData);
@@ -59,11 +62,11 @@ const News=(props)=>{
     return (
       <div
        className="container my-3" 
-        style={{ backgroundColor: "#181717", padding: "4px"}}
+        style={{ backgroundColor: "#181717"}}
       >
         <h1
           className="my-4 text-center"
-          style={{ color: "white", margin: "30px 0px" }}
+          style={{ color: "white",paddingTop:"60px"}}
         >
           News Bites - Top {props.category} Headlines 
         </h1>

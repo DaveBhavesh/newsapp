@@ -12,10 +12,6 @@ const News=(props)=>{
   const [page, setPage] = useState(1)
   const [totalResults, setTotalResults] = useState(0)
 
-  
-    // document.title= `${props.category}-NewsBites` 
- 
-
    const updateNews=async()=>{
     props.setProgress(10);
     setLoading(true)
@@ -43,7 +39,7 @@ const News=(props)=>{
   //   setPage(page-1)
   //   updateNews()
   // };
-  // const handleNextClick = async () => {
+  // const handleNextClick = async () => { 
   //   console.log("Next");
   //    setPage(page+1)
   //   updateNews()
@@ -73,10 +69,10 @@ const News=(props)=>{
         {loading && <Spinner />}
         <InfiniteScroll  
        
-        dataLength={articles.length}
+        dataLength={articles?.length}
         next={fetchMoreData}
-        hasMore={articles.length!==totalResults}
-        loader= {articles.length<=totalResults ?  <Spinner />:" "}>
+        hasMore={articles?.length!==totalResults}
+        loader= {articles?.length<=totalResults ?  <Spinner />:" "}>
           <div className="container">
         <div className="row">
           {articles?.map((element) => {
